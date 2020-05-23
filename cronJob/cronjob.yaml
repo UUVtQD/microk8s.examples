@@ -11,9 +11,9 @@ spec:
         spec:
           containers:
           - name: cron-example
-            image: alpine
+            image: registry.lsp.sixt-leasing.com/cronnn:0.1
             args:
             - /bin/sh
             - -c
-            - date;echo Hello there
-          restartPolicy: OnFailur
+            - 'curl -I -H "X-Bypass-Cache: true" https://gebrauchtwagen.autohaus24.de/ -v -s'
+          restartPolicy: OnFailure
