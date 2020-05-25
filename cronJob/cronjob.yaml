@@ -5,6 +5,11 @@ metadata:
   name: cron-example
 spec:
   schedule: "*/2 * * * *"
+  # Limit of history for successfull and failed jobs
+  # By default set to 3 and 1 respectfully
+  # 0 - disable history
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
   jobTemplate:
     spec:
       template:
