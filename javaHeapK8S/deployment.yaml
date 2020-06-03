@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: a-container
+  labels:
+    app: a-container
+spec:
+  selector:
+    matchLabels:
+      app: a-container
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        test: heapdump
+        app: a-container
+    spec:
+      containers:
+      - name: a-container
+        image: nginx
+        #command: ["java", "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=/dumps/oom.bin", "-jar", "yourapp.jar"]
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","echo Hello from the perStop handler > /dumps/message"]
+        resources:
+          limits:
+            memory: 128Mi
+        volumeMounts:
+        - name: heap-dumps
+          mountPath: /dumps
+      - name: ship-heap-dump
+        image: registry.lsp.sixt-leasing.com/sml-java-heap-watch:0.2
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          inotifywait -m /dumps -e close_write | while read path action file; do cp "$path$file" "/"; done;
+        volumeMounts:
+        - name: heap-dumps
+          mountPath: /dumps
+      volumes:
+      - name: heap-dumps
+        emptyDir: {}
