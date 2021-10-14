@@ -1,4 +1,6 @@
 ### Commands
+
+```bash
 microk8s.kubectl apply -f deployment.yaml 
 microk8s.kubectl get po
 microk8s.kubectl exec -ti -c a-container po/a-container-7844df568-d84hb -- bash 
@@ -6,6 +8,7 @@ microk8s.kubectl exec -ti -c a-container po/a-container-7844df568-d84hb -- bash
   apt install procps
   stress --vm 1 --vm-bytes 120M &
   stress --vm 1 --vm-bytes 250M
+```
 
 ### References
 https://medium.com/@zhimin.wen/memory-limit-of-pod-and-oom-killer-891ee1f1cad8
